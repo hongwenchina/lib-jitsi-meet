@@ -413,7 +413,7 @@ export default class ConnectionQuality {
      * Broadcasts the local statistics to all other participants in the
      * conference.
      */
-    _broadcastLocalStats() {
+     _broadcastLocalStats() {
         // Send only the data that remote participants care about.
         const data = {
             bitrate: this._localStats.bitrate,
@@ -426,10 +426,19 @@ export default class ConnectionQuality {
         };
 
         try {
-            this._conference.sendEndpointStatsMessage(data);
-        } catch (err) {
-            // Ignore the error as we might hit it in the beginning of the call before the channel is ready.
-            // The statistics will be sent again after few seconds and error is logged elseware as well.
+            this._conference.broadcastEndpointMessage({
+                type: STATS_MESSAGE_TYPE,
+                values: data });
+        } catch (e) {
+            // We often hit this in the beginning of a call, before the data
+            // channel is ready. It is not a big problem, because we will
+            // send the statistics again after a few seconds, and the error is
+            // already logged elsewhere. So just ignore it.
+
+            // let errorMsg = "Failed to broadcast local stats";
+            // logger.error(errorMsg, e);
+            // GlobalOnErrorHandler.callErrorHandler(
+            //    new Error(errorMsg + ": " + e));
         }
     }
 

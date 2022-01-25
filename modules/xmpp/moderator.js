@@ -185,6 +185,17 @@ Moderator.prototype.createConferenceIq = function() {
             }).up();
     }
 
+    if (config.testing && config.testing.octo
+        && typeof config.testing.octo.probability === 'number') {
+        if (Math.random() < config.testing.octo.probability) {
+            elem.c(
+                'property', {
+                    name: 'octo',
+                    value: true
+                }).up();
+        }
+    }
+
     if (this.options.conference.startAudioMuted !== undefined) {
         elem.c(
             'property', {

@@ -422,9 +422,11 @@ JitsiConference.prototype._init = function(options = {}) {
     if (!this.rtc) {
         this.rtc = new RTC(this, options);
         this.eventManager.setupRTCListeners();
+        /*  removed by lihongwen, 2022-1-23
         if (FeatureFlags.isSourceNameSignalingEnabled()) {
             this._registerRtcListeners(this.rtc);
         }
+        */
     }
 
     this.receiveVideoController = new ReceiveVideoController(this, this.rtc);
@@ -1153,9 +1155,11 @@ JitsiConference.prototype._fireMuteChangeEvent = function(track) {
 
     // Send the video type message to the bridge if the track is not removed/added to the pc as part of
     // the mute/unmute operation. This currently happens only on Firefox.
+    /*  removed By Lihongwen
     if (track.isVideoTrack() && !browser.doesVideoMuteByStreamRemove()) {
         this._sendBridgeVideoTypeMessage(track);
     }
+    */
 
     this.eventEmitter.emit(JitsiConferenceEvents.TRACK_MUTE_CHANGED, track, actorParticipant);
 };
@@ -1249,9 +1253,11 @@ JitsiConference.prototype.replaceTrack = function(oldTrack, newTrack) {
             newTrack && this._setupNewTrack(newTrack);
 
             // Send 'VideoTypeMessage' on the bridge channel when a video track is added/removed.
+            /* removed By Lihongwen
             if ((oldTrackBelongsToConference && oldTrack?.isVideoTrack()) || newTrack?.isVideoTrack()) {
                 this._sendBridgeVideoTypeMessage(newTrack);
             }
+            */
 
             // updates presence when we replace the video tracks desktop with screen and screen with desktop
             if (oldTrackBelongsToConference && oldTrack?.isVideoTrack()
@@ -1444,11 +1450,14 @@ JitsiConference.prototype._addLocalTrackAsUnmute = function(track) {
         logger.debug('Add local MediaStream as unmute - no P2P Jingle session started yet');
     }
 
+    return Promise.all(addAsUnmutePromises);
+    /* removed by Lihongwen
     return Promise.allSettled(addAsUnmutePromises)
         .then(() => {
             // Signal the video type to the bridge.
             track.isVideoTrack() && this._sendBridgeVideoTypeMessage(track);
         });
+    */
 };
 
 /**
@@ -1472,11 +1481,14 @@ JitsiConference.prototype._removeLocalTrackAsMute = function(track) {
         logger.debug('Remove local MediaStream - no P2P JingleSession started yet');
     }
 
+    return Promise.allSettled(removeAsMutePromises);
+    /* removed by Lihongwen
     return Promise.allSettled(removeAsMutePromises)
         .then(() => {
             // Signal the video type to the bridge.
             track.isVideoTrack() && this._sendBridgeVideoTypeMessage();
         });
+    */
 };
 
 /**

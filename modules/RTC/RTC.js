@@ -262,6 +262,7 @@ export default class RTC extends Listenable {
                     logError(error, 'LastNChangedEvent', this._lastN);
                 }
             }
+            /* removed by lihongwen
             if (!FeatureFlags.isSourceNameSignalingEnabled()) {
                 try {
                     this._channel.sendVideoTypeMessage(this._videoType);
@@ -269,6 +270,7 @@ export default class RTC extends Listenable {
                     logError(error, 'VideoTypeMessage', this._videoType);
                 }
             }
+            */
 
             this.removeListener(RTCEvents.DATA_CHANNEL_OPEN, this._channelOpenListener);
             this._channelOpenListener = null;
@@ -386,9 +388,11 @@ export default class RTC extends Listenable {
         if (this._videoType !== videoType) {
             this._videoType = videoType;
 
+            /* removed by lihongwen
             if (this._channel && this._channel.isOpen()) {
                 this._channel.sendVideoTypeMessage(videoType);
             }
+            */
         }
     }
 
@@ -398,9 +402,11 @@ export default class RTC extends Listenable {
      * @param {BridgeVideoType} videoType - the track's video type.
      */
     sendSourceVideoType(sourceName, videoType) {
+        /* removed By Lihongwen
         if (this._channel && this._channel.isOpen()) {
             this._channel.sendSourceVideoTypeMessage(sourceName, videoType);
         }
+        */
     }
 
     /**

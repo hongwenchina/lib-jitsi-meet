@@ -56,6 +56,7 @@
     "webpack-cli": "4.9.0"
   },
   "scripts": {
+    "build": "webpack && sudo cp lib-jitsi-meet.min.js lib-jitsi-meet.min.map /opt/superv-conference/meet/libs",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "postinstall": "webpack",

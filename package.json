@@ -59,7 +59,6 @@
     "build": "webpack && sudo cp lib-jitsi-meet.min.js lib-jitsi-meet.min.map /opt/superv-conference/meet/libs",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "postinstall": "webpack",
     "test": "karma start karma.conf.js",
     "test-watch": "karma start karma.conf.js --no-single-run",
     "validate": "npm ls",

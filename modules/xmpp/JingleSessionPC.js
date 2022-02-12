@@ -1693,9 +1693,7 @@ export default class JingleSessionPC extends JingleSession {
      * @returns {Promise<JitsiRemoteTrack>} Promise that resolves with the tracks that are removed or error if the
      * operation fails.
      */
-    removeRemoteStreamsOnLeave(id) {
-        let remoteTracks = [];
-
+     removeRemoteStreamsOnLeave(id) {
         const workFunction = finishCallback => {
             const removeSsrcInfo = this.peerconnection.getRemoteSourceInfoByParticipant(id);
 
@@ -1703,7 +1701,6 @@ export default class JingleSessionPC extends JingleSession {
                 const oldLocalSdp = new SDP(this.peerconnection.localDescription.sdp);
                 const newRemoteSdp = this._processRemoteRemoveSource(removeSsrcInfo);
 
-                remoteTracks = this.peerconnection.removeRemoteTracks(id);
                 this._renegotiate(newRemoteSdp.raw)
                     .then(() => {
                         const newLocalSDP = new SDP(this.peerconnection.localDescription.sdp);
@@ -1717,21 +1714,17 @@ export default class JingleSessionPC extends JingleSession {
             }
         };
 
-        return new Promise((resolve, reject) => {
-            logger.debug(`${this} Queued removeRemoteStreamsOnLeave task for participant ${id}`);
+        logger.debug(`${this} Queued removeRemoteStreamsOnLeave task for participant ${id}`);
 
-            this.modificationQueue.push(
-                workFunction,
-                error => {
-                    if (error) {
-                        logger.error(`${this} removeRemoteStreamsOnLeave error:`, error);
-                        reject(error);
-                    } else {
-                        logger.info(`${this} removeRemoteStreamsOnLeave done!`);
-                        resolve(remoteTracks);
-                    }
-                });
-        });
+        this.modificationQueue.push(
+            workFunction,
+            error => {
+                if (error) {
+                    logger.error(`${this} removeRemoteStreamsOnLeave error:`, error);
+                } else {
+                    logger.info(`${this} removeRemoteStreamsOnLeave done!`);
+                }
+            });
     }
 
     /**

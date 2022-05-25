@@ -37,7 +37,6 @@ import * as ConnectionQualityEvents
     from './service/connectivity/ConnectionQualityEvents';
 import * as E2ePingEvents from './service/e2eping/E2ePingEvents';
 import { createGetUserMediaEvent } from './service/statistics/AnalyticsEvents';
-
 const logger = Logger.getLogger(__filename);
 
 /**
@@ -105,6 +104,7 @@ export default _mergeNamespaceAndModule({
     version: '{#COMMIT_HASH#}',
 
     JitsiConnection,
+    supervCreateLocalTracks: RTC.createLocalTracks,
 
     /**
      * {@code ProxyConnectionService} is used to connect a remote peer to a
@@ -351,10 +351,11 @@ export default _mergeNamespaceAndModule({
 
                 // set the contentHint to "detail" for desktop tracks
                 // eslint-disable-next-line prefer-const
+                // modified to 'text' by Lihongwen, 2022-05-25
                 for (const track of tracks) {
                     if (track.type === MediaType.VIDEO
                         && track.videoType === 'desktop') {
-                        this.setVideoTrackContentHints(track.track, 'detail');
+                        this.setVideoTrackContentHints(track.track, 'text');
                     }
                 }
 
